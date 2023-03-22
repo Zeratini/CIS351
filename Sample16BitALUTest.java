@@ -51,6 +51,30 @@ public class Sample16BitALUTest {
   }
 
   @Test
+  public void testAddu2() {
+    setPinUnsigned("InputA", 32767);
+    setPinUnsigned("InputB", 1);
+    setPinUnsigned("Op", OpCodes.ADDU);
+    run();
+    Assert.assertEquals("Addition Output", (32767+1) % 65536, readPinUnsigned("Output"));
+
+    // Overflow for unsigned addition is false by definition
+    Assert.assertEquals("Addition Overflow", false, readPin("Overflow"));
+  }
+
+  @Test
+  public void testAddu3() {
+    setPinUnsigned("InputA", 32767);
+    setPinUnsigned("InputB", 2);
+    setPinUnsigned("Op", OpCodes.ADDU);
+    run();
+    Assert.assertEquals("Addition Output", (32767+2) % 65536, readPinUnsigned("Output"));
+
+    // Overflow for unsigned addition is false by definition
+    Assert.assertEquals("Addition Overflow", false, readPin("Overflow"));
+  }
+
+  @Test
   public void testSubu() {
     setPinUnsigned("InputA", 53400);
     setPinUnsigned("InputB", 53500);
@@ -69,6 +93,18 @@ public class Sample16BitALUTest {
     setPinUnsigned("Op", OpCodes.SUBU);
     run();
     Assert.assertEquals("Subtration Output", (53500 - 53400) % 65536, readPinUnsigned("Output"));
+
+    // Overflow for unsigned addition is false by definition
+    Assert.assertEquals("Addition Overflow", false, readPin("Overflow"));
+  }
+
+  @Test
+  public void testSubu3() {
+    setPinUnsigned("InputA", 32767);
+    setPinUnsigned("InputB", 32769);
+    setPinUnsigned("Op", OpCodes.SUBU);
+    run();
+    Assert.assertEquals("Subtration Output", 65536 + (32767 - 32769), readPinUnsigned("Output"));
 
     // Overflow for unsigned addition is false by definition
     Assert.assertEquals("Addition Overflow", false, readPin("Overflow"));
@@ -125,6 +161,7 @@ public class Sample16BitALUTest {
     Assert.assertEquals("Subtraction Output with " + a + " minus " + b, expected, readPinSigned("Output"));
 
     Assert.assertEquals("Subtraction Overflow with " + a + " minus " + b, expectedOverflow, readPin("Overflow"));
+
   }
 
   public static final long testIntegers[] = {-32768, -32767, 0, 1, 2, 13, 127, 128, 129, 0x5555, 32766, 32767, -1, -2, -3};
